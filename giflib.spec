@@ -1,18 +1,15 @@
 Summary:	GIF-manipulation library
 Name:		giflib
-Version:	4.1.6
-Release:	5
+Version:	5.0.5
+Release:	1
 License:	X Consortium-like
 Group:		Libraries
 Source0:	http://heanet.dl.sourceforge.net/giflib/%{name}-%{version}.tar.bz2
-# Source0-md5:	7125644155ae6ad33dbc9fc15a14735f
-Patch0:		%{name}-link.patch
-Patch1:		%{name}-segfault.patch
+# Source0-md5:	c3262ba0a3dad31ba876fb5ba1d71a02
 URL:		http://sourceforge.net/projects/giflib/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool
-#BuildRequires:	xorg-libX11-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -39,8 +36,6 @@ files.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
 
 %build
 %{__libtoolize}
@@ -52,20 +47,11 @@ files.
 	--disable-static
 %{__make}
 
-# libungif compat
-%{__cc} -shared -Wl,-soname,libungif.so.4 -Llib/.libs -lgif -o libungif.so.%{version}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-# libungif compat
-install libungif.so.%{version} $RPM_BUILD_ROOT%{_libdir}
-/usr/sbin/ldconfig -n $RPM_BUILD_ROOT%{_libdir}
-ln -sf libgif.la $RPM_BUILD_ROOT%{_libdir}/libungif.la
-ln -sf libgif.so.4 $RPM_BUILD_ROOT%{_libdir}/libungif.so
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -76,22 +62,16 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS BUGS COPYING ChangeLog NEWS README TODO
-%attr(755,root,root) %ghost %{_libdir}/libgif.so.?
-%attr(755,root,root) %ghost %{_libdir}/libungif.so.?
+%attr(755,root,root) %ghost %{_libdir}/libgif.so.6
 %attr(755,root,root) %{_libdir}/libgif.so.*.*.*
-%attr(755,root,root) %{_libdir}/libungif.so.*.*.*
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/*.{txt,png} doc/{gif_lib,index,liberror}.html
 %attr(755,root,root) %{_libdir}/libgif.so
-%attr(755,root,root) %{_libdir}/libungif.so
-%{_libdir}/libgif.la
-%{_libdir}/libungif.la
 %{_includedir}/*.h
 
 %files progs
 %defattr(644,root,root,755)
-%doc doc/gif2* doc/gif[a-z]* doc/*2gif*
 %attr(755,root,root) %{_bindir}/*
+%{_mandir}/man1/gif*1.*
 
