@@ -1,11 +1,11 @@
 Summary:	GIF-manipulation library
 Name:		giflib
-Version:	5.0.5
+Version:	5.0.6
 Release:	1
 License:	X Consortium-like
 Group:		Libraries
 Source0:	http://heanet.dl.sourceforge.net/giflib/%{name}-%{version}.tar.bz2
-# Source0-md5:	c3262ba0a3dad31ba876fb5ba1d71a02
+# Source0-md5:	603838feeed62e9eaa90415742adddf9
 URL:		http://sourceforge.net/projects/giflib/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -52,6 +52,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
